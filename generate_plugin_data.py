@@ -54,7 +54,7 @@ TTL_HEAD = """
 
 <https://taylor.fish/plugins/ampmod>
     a lv2:Plugin ,
-      lv2:WaveshaperPlugin ;
+      lv2:AmplifierPlugin ;
     doap:name "Fish AmpMod" ;
     doap:license <https://www.gnu.org/licenses/gpl-3.0.txt> ;
     doap:developer [
