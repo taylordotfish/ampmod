@@ -181,7 +181,7 @@ static const LV2_Descriptor descriptor = {
 
 LV2_SYMBOL_EXPORT
 const LV2_Descriptor *lv2_descriptor(uint32_t index) {
-    switch(index) {
+    switch (index) {
         case 0:
             return &descriptor;
         default:
