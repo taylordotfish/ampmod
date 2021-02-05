@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2018 taylor.fish <contact@taylor.fish>
+# Copyright (C) 2017-2018, 2021 taylor.fish <contact@taylor.fish>
 #
 # This file is part of Fish AmpMod.
 #
@@ -16,7 +16,8 @@
 # along with Fish AmpMod.  If not, see <http://www.gnu.org/licenses/>.
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -pedantic -std=c99 -fpic -Ofast -MMD
+CFLAGS = -Wall -Wextra -Werror -pedantic -std=c99 -fpic -Ofast -MMD \
+         -fvisibility=hidden -flto -fwhole-program
 LDFLAGS = -shared -Wl,--no-undefined,--no-allow-shlib-undefined
 LDLIBS = -lm
 OBJECTS = ampmod.o
