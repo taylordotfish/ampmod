@@ -41,7 +41,7 @@
         foaf:mbox <mailto:contact@taylor.fish> ;
     ] ;
     lv2:optionalFeature lv2:hardRTCapable ;
-    lv2:requiredFeature pprops:supportsStrictBounds ;
+    lv2:optionalFeature pprops:supportsStrictBounds ;
     lv2:port [
         a lv2:AudioPort ,
           lv2:InputPort ;

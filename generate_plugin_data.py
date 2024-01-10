@@ -68,7 +68,7 @@ TTL_HEAD = """
         foaf:mbox <mailto:contact@taylor.fish> ;
     ] ;
     lv2:optionalFeature lv2:hardRTCapable ;
-    lv2:requiredFeature pprops:supportsStrictBounds ;
+    lv2:{strict_bounds_required}Feature pprops:supportsStrictBounds ;
     lv2:port [
 """
 
@@ -223,7 +223,15 @@ class Writer:
 
 def generate_files(writer):
     w = writer
-    w.ttl_raw(TTL_HEAD.strip())
+    w.ttl_raw(
+        TTL_HEAD.strip().format(
+            strict_bounds_required=(
+                "required"
+                if os.getenv("STRICT_BOUNDS_REQUIRED")
+                else "optional"
+            ),
+        ),
+    )
     w.c_raw(C_HEAD.strip())
     for i, (c_name, template) in enumerate(PORTS.items()):
         w.port(c_name, template, first=(i == 0))

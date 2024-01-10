@@ -32,6 +32,17 @@ static inline int float_cmp(float first, float second) {
     return 0;
 }
 
+static inline float clampf(float f, float min, float max) {
+    #ifdef STRICT_BOUNDS_REQUIRED
+        (void)min;
+        (void)max;
+    #else
+        if (f < min) return min;
+        if (f > max) return max;
+    #endif
+    return f;
+}
+
 static LV2_Handle instantiate(
         const LV2_Descriptor *descriptor, double rate, const char *bundle_path,
         const LV2_Feature * const *features) {
@@ -80,7 +91,8 @@ static void activate(LV2_Handle instance) {
 }
 
 static void handle_base_change(AmpMod *am) {
-    if (float_cmp(*am->base, am->base_target) == 0) return;
+    const float base = clampf(*am->base, 0, 1);
+    if (float_cmp(base, am->base_target) == 0) return;
     const float samples_per_ms = am->samples_per_ms;
     const float increment_per_ms = *am->increment;
     bool smoothing = (increment_per_ms > 0);
@@ -101,7 +113,7 @@ static void handle_base_change(AmpMod *am) {
 
     am->moving = smoothing;
     am->samples_since_change = 0;
-    am->base_target = *am->base;
+    am->base_target = base;
 }
 
 static void run(LV2_Handle instance, uint32_t n_samples) {
@@ -111,13 +123,13 @@ static void run(LV2_Handle instance, uint32_t n_samples) {
     float * const * const outputs = am->outputs;
 
     handle_base_change(am);
-    const float base_target = *am->base;
-    const float exponent = *am->exponent;
+    const float base_target = am->base_target;
+    const float exponent = clampf(*am->exponent, 0, 3.5);
     float last_base = am->last_base;
 
     const float samples_per_ms = am->samples_per_ms;
-    const float increment_per_ms = *am->increment;
-    const float min_multiplier = *am->min_multiplier;
+    const float increment_per_ms = clampf(*am->increment, 0, 0.1);
+    const float min_multiplier = clampf(*am->min_multiplier, 0, 1);
 
     uint32_t samples_since_change = am->samples_since_change;
     bool moving = am->moving;
